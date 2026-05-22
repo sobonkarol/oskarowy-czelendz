@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  ratings   Rating[]
+  createdAt DateTime @default(now())
+}
+
+model Movie {
+  id                String    @id @default(cuid())
+  tmdbId            Int?      @unique
+  title             String
+  ceremonyYear      Int
+  releaseYear       Int
+  director          String
+  posterPath        String?
+  overview          String?
+  isWinner          Boolean   @default(false)
+  streamingData     Json?
+  streamingCachedAt DateTime?
+  ratings           Rating[]
+
+  @@index([ceremonyYear])
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  score     Int
+  userId    String
+  movieId   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, movieId])
+}
