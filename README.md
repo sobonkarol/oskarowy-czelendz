@@ -101,7 +101,10 @@ Utwórz plik `.env` w katalogu głównym:
 
 ```env
 # Baza danych (Neon PostgreSQL)
-DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
+# DATABASE_URL — pooled connection string z Neon Dashboard (zakładka "Connection pooling")
+DATABASE_URL="postgresql://user:password@ep-xxx-pooler.region.aws.neon.tech/neondb?sslmode=require&pgbouncer=true"
+# DIRECT_URL — bezpośredni connection string (bez -pooler) — używany przez Prisma CLI
+DIRECT_URL="postgresql://user:password@ep-xxx.region.aws.neon.tech/neondb?sslmode=require"
 
 # NextAuth — wygeneruj: openssl rand -base64 32
 AUTH_SECRET="twój-sekretny-klucz"
@@ -145,7 +148,8 @@ npm run dev
 
 | Zmienna | Wymagana | Opis |
 |---|---|---|
-| `DATABASE_URL` | tak | Connection string do Neon PostgreSQL |
+| `DATABASE_URL` | tak | Pooled connection string z Neon (zakładka "Connection pooling" w Dashboard) |
+| `DIRECT_URL` | tak | Bezpośredni connection string z Neon (bez `-pooler`) — dla migracji |
 | `AUTH_SECRET` | tak | Losowy sekret dla NextAuth (min. 32 znaki) |
 | `TMDB_API_KEY` | tak | Klucz API z themoviedb.org |
 | `WATCHMODE_API_KEY` | tak | Klucz API z api.watchmode.com |
@@ -164,6 +168,17 @@ DATABASE_URL="twój-connection-string" npm run seed
 - **Streaming cache** — dostępność platform cache'owana jest w bazie przez 7 dni, by nie przekraczać limitów bezpłatnego planu Watchmode (tylko region PL).
 - **TMDB cache** — odpowiedzi TMDB cache'owane przez Next.js przez 24 h (`revalidate: 86400`).
 - **Sesje** — strategia JWT; brak sesji w bazie danych.
+- **Connection pooling** — `DATABASE_URL` musi wskazywać na pooled endpoint Neon (hostname z `-pooler`). `DIRECT_URL` bez poolera jest wymagany dla `prisma db push` i migracji.
+
+### Keep-alive (eliminacja cold startów Neon)
+
+Na darmowym planie Neon baza zasypia po ~5 minutach bezczynności. Aby temu zapobiec, skonfiguruj darmowy cron na [cron-job.org](https://cron-job.org):
+
+1. Zarejestruj się na cron-job.org (darmowe)
+2. Utwórz nowy job: `GET https://twoja-domena.vercel.app/api/ping`
+3. Ustaw interwał: **co 4 minuty**
+
+Endpoint `/api/ping` wykonuje `SELECT 1` — utrzymuje połączenie aktywne bez żadnych kosztów.
 
 ---
 
