@@ -94,6 +94,12 @@ describe("POST /api/ratings", () => {
     expect(res.status).toBe(400)
   })
 
+  it("returns 400 when score is a float", async () => {
+    vi.mocked(auth).mockResolvedValueOnce(mockSession as never)
+    const res = await POST(postRequest({ movieId: "m1", score: 7.5 }))
+    expect(res.status).toBe(400)
+  })
+
   it("accepts score of exactly 1", async () => {
     vi.mocked(auth).mockResolvedValueOnce(mockSession as never)
     vi.mocked(prisma.rating.upsert).mockResolvedValueOnce({ ...mockRating, score: 1 } as never)
@@ -206,6 +212,13 @@ describe("GET /api/ratings", () => {
       userId: "user-123",
       movie: { ceremonyYear: 2024 },
     })
+  })
+
+  it("returns 400 when year param is not a valid integer", async () => {
+    vi.mocked(auth).mockResolvedValueOnce(mockSession as never)
+    const req = new NextRequest("http://localhost/api/ratings?year=abc", { method: "GET" })
+    const res = await GET(req)
+    expect(res.status).toBe(400)
   })
 
   it("includes movie data in the response", async () => {
