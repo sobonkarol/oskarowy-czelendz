@@ -38,14 +38,15 @@ export default async function RankingPage() {
 
   // Top users by number of ratings & avg score
   const users = await prisma.user.findMany({
+    where: { ratings: { some: {} } },
     include: {
       ratings: { select: { score: true } },
     },
     orderBy: { ratings: { _count: "desc" } },
+    take: 50,
   })
 
   const usersRanked = users
-    .filter(u => u.ratings.length > 0)
     .map(u => ({
       id: u.id,
       firstName: u.firstName,
@@ -98,7 +99,7 @@ export default async function RankingPage() {
                       {i < 3 ? <Medal className="w-4 h-4 mx-auto" /> : `#${i + 1}`}
                     </span>
 
-                    <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black flex-shrink-0">
+                    <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black shrink-0">
                       {getInitials(u.firstName, u.lastName)}
                     </div>
 
@@ -158,11 +159,11 @@ export default async function RankingPage() {
             ) : (
               moviesRanked.map((m, i) => (
                 <div key={m.id} className="glass rounded-xl flex items-center gap-3 overflow-hidden glass-hover">
-                  <div className="w-10 text-center text-xs font-bold text-(--text-muted) px-2 flex-shrink-0">
+                  <div className="w-10 text-center text-xs font-bold text-(--text-muted) px-2 shrink-0">
                     #{i + 1}
                   </div>
 
-                  <div className="relative w-10 h-14 flex-shrink-0">
+                  <div className="relative w-10 h-14 shrink-0">
                     {m.posterPath ? (
                       <Image
                         src={`${TMDB_IMG}${m.posterPath}`}
@@ -180,7 +181,7 @@ export default async function RankingPage() {
 
                   <div className="flex-1 min-w-0 py-2">
                     <div className="flex items-center gap-1.5">
-                      {m.isWinner && <Trophy className="w-3 h-3 text-(--gold) flex-shrink-0" />}
+                      {m.isWinner && <Trophy className="w-3 h-3 text-(--gold) shrink-0" />}
                       <span className="text-sm font-medium text-(--text-primary) truncate">
                         {m.title}
                       </span>

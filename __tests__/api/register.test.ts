@@ -71,6 +71,28 @@ describe("POST /api/auth/register", () => {
     expect(res.status).not.toBe(400)
   })
 
+  it("returns 400 for invalid email format", async () => {
+    const res = await POST(makeRequest({ firstName: "Jan", lastName: "K", email: "not-an-email", password: "secret123" }))
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.error).toBeTruthy()
+  })
+
+  it("returns 400 when firstName exceeds 50 characters", async () => {
+    const res = await POST(makeRequest({ firstName: "A".repeat(51), lastName: "K", email: "a@b.com", password: "secret123" }))
+    expect(res.status).toBe(400)
+  })
+
+  it("returns 400 when password exceeds 128 characters", async () => {
+    const res = await POST(makeRequest({ firstName: "Jan", lastName: "K", email: "a@b.com", password: "x".repeat(129) }))
+    expect(res.status).toBe(400)
+  })
+
+  it("returns 400 when non-string fields are provided", async () => {
+    const res = await POST(makeRequest({ firstName: 123, lastName: "K", email: "a@b.com", password: "secret123" }))
+    expect(res.status).toBe(400)
+  })
+
   it("returns 409 when email is already taken", async () => {
     vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({
       id: "existing-id",

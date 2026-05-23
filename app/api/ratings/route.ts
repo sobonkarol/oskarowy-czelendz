@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
   const { movieId, score } = await req.json()
 
-  if (!movieId || typeof score !== "number" || score < 1 || score > 10) {
+  if (!movieId || typeof score !== "number" || !Number.isInteger(score) || score < 1 || score > 10) {
     return NextResponse.json({ error: "Invalid data" }, { status: 400 })
   }
 
@@ -40,11 +40,16 @@ export async function GET(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { searchParams } = new URL(req.url)
-  const year = searchParams.get("year")
+  const yearParam = searchParams.get("year")
 
-  const where = year
-    ? { userId: session.user.id, movie: { ceremonyYear: parseInt(year) } }
-    : { userId: session.user.id }
+  let where: object = { userId: session.user.id }
+  if (yearParam !== null) {
+    const yearNum = parseInt(yearParam, 10)
+    if (!Number.isInteger(yearNum) || isNaN(yearNum)) {
+      return NextResponse.json({ error: "Invalid year" }, { status: 400 })
+    }
+    where = { userId: session.user.id, movie: { ceremonyYear: yearNum } }
+  }
 
   const ratings = await prisma.rating.findMany({
     where,
