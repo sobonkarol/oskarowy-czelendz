@@ -44,12 +44,12 @@ Then("I can see a link {string}", async ({ page }, label: string) => {
 })
 
 Then("I can see an error message", async ({ page }) => {
-  const error = page.locator("[class*='red-']").first()
+  const error = page.locator("main [class*='red-'], form [class*='red-']").first()
   await expect(error).toBeVisible({ timeout: 5_000 })
 })
 
 Then("I can see an error message containing {string}", async ({ page }, text: string) => {
-  const error = page.locator("[class*='red-']").first()
+  const error = page.locator("main [class*='red-'], form [class*='red-']").first()
   await expect(error).toBeVisible({ timeout: 5_000 })
   await expect(error).toContainText(text)
 })

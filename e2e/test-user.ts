@@ -3,6 +3,7 @@ export const TEST_USER = {
   lastName: "Playwright",
   email: "playwright-e2e@test.local",
   password: "Playwright123!",
+  newPassword: "Playwright456!",
 }
 
 export const AUTH_FILE = "e2e/.auth/user.json"
