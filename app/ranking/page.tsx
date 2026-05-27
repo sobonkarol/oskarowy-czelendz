@@ -107,7 +107,7 @@ export default async function RankingPage() {
 
                     <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black shrink-0 overflow-hidden">
                       {u.avatarUrl
-                        ? <img src={u.avatarUrl} alt={u.firstName} className="w-full h-full object-cover" />
+                        ? <span className="text-lg leading-none">{u.avatarUrl}</span>
                         : getInitials(u.firstName, u.lastName)
                       }
                     </div>
@@ -136,7 +136,7 @@ export default async function RankingPage() {
                 <span className="w-7 text-center text-sm text-(--text-muted)">–</span>
                 <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black overflow-hidden">
                   {currentUser?.avatarUrl
-                    ? <img src={currentUser.avatarUrl} alt={session.user.firstName} className="w-full h-full object-cover" />
+                    ? <span className="text-lg leading-none">{currentUser.avatarUrl}</span>
                     : getInitials(session.user.firstName, session.user.lastName)
                   }
                 </div>
