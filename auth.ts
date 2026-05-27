@@ -6,6 +6,12 @@ import authConfig from "./auth.config"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
+  logger: {
+    error(error) {
+      if (error.name === "CredentialsSignin") return
+      console.error(error)
+    },
+  },
   providers: [
     Credentials({
       credentials: {
