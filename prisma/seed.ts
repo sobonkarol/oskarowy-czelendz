@@ -8,17 +8,32 @@ const prisma = new PrismaClient({ adapter })
 const TMDB_KEY = process.env.TMDB_API_KEY ?? "f444a77f642f0982dbc23fda35d86cf6"
 const TMDB_BASE = "https://api.themoviedb.org/3"
 
+function normalise(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]/g, "")
+}
+
 async function searchTmdb(title: string, year: number) {
   const url = `${TMDB_BASE}/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(title)}&year=${year}`
   const res = await fetch(url)
   const data = await res.json()
+
+  // Pick first result whose title roughly matches (guards against TMDB returning
+  // a more-popular film with a similar name, e.g. "The Lion King" for "Lion")
+  const titleNorm = normalise(title)
+  const match = (data.results ?? []).find(
+    (r: { title: string }) => normalise(r.title) === titleNorm
+  )
+  if (match) return match
   if (data.results?.length > 0) return data.results[0]
 
-  // Retry without year
+  // Retry without year, again preferring exact title match
   const url2 = `${TMDB_BASE}/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(title)}`
   const res2 = await fetch(url2)
   const data2 = await res2.json()
-  return data2.results?.[0] ?? null
+  const match2 = (data2.results ?? []).find(
+    (r: { title: string }) => normalise(r.title) === titleNorm
+  )
+  return match2 ?? data2.results?.[0] ?? null
 }
 
 async function sleep(ms: number) {

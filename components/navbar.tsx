@@ -8,9 +8,9 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 import type { Session } from "next-auth"
 
-type Props = { session: Session }
+type Props = { session: Session; avatarUrl?: string | null }
 
-export default function Navbar({ session }: Props) {
+export default function Navbar({ session, avatarUrl }: Props) {
   const path = usePathname()
   const [open, setOpen] = useState(false)
 
@@ -20,6 +20,13 @@ export default function Navbar({ session }: Props) {
     { href: "/", label: "Lata", icon: Film },
     { href: "/ranking", label: "Ranking", icon: BarChart3 },
   ]
+
+  const avatar = avatarUrl ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
+  ) : (
+    <span className="text-xs font-bold text-black">{initials}</span>
+  )
 
   return (
     <nav className="sticky top-0 z-50 glass border-b border-[var(--border)]">
@@ -63,9 +70,16 @@ export default function Navbar({ session }: Props) {
 
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black">
-                {initials}
-              </div>
+              <Link
+                href="/profile"
+                title="Ustawienia profilu"
+                className={cn(
+                  "w-8 h-8 rounded-full winner-badge flex items-center justify-center overflow-hidden transition-transform hover:scale-110",
+                  path === "/profile" && "ring-2 ring-(--gold) ring-offset-1 ring-offset-(--bg-primary)"
+                )}
+              >
+                {avatar}
+              </Link>
               <span className="text-sm text-[var(--text-secondary)]">
                 {session.user.firstName}
               </span>
@@ -107,9 +121,16 @@ export default function Navbar({ session }: Props) {
             </Link>
           ))}
           <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--border)] mt-2">
-            <span className="text-sm text-[var(--text-secondary)]">
+            <Link
+              href="/profile"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 text-sm text-(--text-secondary)"
+            >
+              <div className="w-7 h-7 rounded-full winner-badge flex items-center justify-center overflow-hidden">
+                {avatar}
+              </div>
               {session.user.firstName} {session.user.lastName}
-            </span>
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
               className="text-sm text-red-400 flex items-center gap-1"

@@ -13,6 +13,7 @@ model User {
   lastName  String
   email     String   @unique
   password  String
+  avatarUrl String?
   ratings   Rating[]
   createdAt DateTime @default(now())
 }

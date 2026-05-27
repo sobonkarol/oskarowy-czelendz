@@ -46,11 +46,17 @@ export default async function RankingPage() {
     take: 50,
   })
 
+  const currentUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { avatarUrl: true },
+  })
+
   const usersRanked = users
     .map(u => ({
       id: u.id,
       firstName: u.firstName,
       lastName: u.lastName,
+      avatarUrl: u.avatarUrl,
       ratingCount: u.ratings.length,
       avgScore: u.ratings.reduce((s, r) => s + r.score, 0) / u.ratings.length,
     }))
@@ -99,8 +105,11 @@ export default async function RankingPage() {
                       {i < 3 ? <Medal className="w-4 h-4 mx-auto" /> : `#${i + 1}`}
                     </span>
 
-                    <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black shrink-0">
-                      {getInitials(u.firstName, u.lastName)}
+                    <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black shrink-0 overflow-hidden">
+                      {u.avatarUrl
+                        ? <img src={u.avatarUrl} alt={u.firstName} className="w-full h-full object-cover" />
+                        : getInitials(u.firstName, u.lastName)
+                      }
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -125,8 +134,11 @@ export default async function RankingPage() {
             {meIndex === -1 && (
               <div className="glass rounded-xl px-4 py-3 flex items-center gap-3 ring-1 ring-(--gold) ring-opacity-30 border-dashed border-(--border)">
                 <span className="w-7 text-center text-sm text-(--text-muted)">–</span>
-                <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black">
-                  {getInitials(session.user.firstName, session.user.lastName)}
+                <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black overflow-hidden">
+                  {currentUser?.avatarUrl
+                    ? <img src={currentUser.avatarUrl} alt={session.user.firstName} className="w-full h-full object-cover" />
+                    : getInitials(session.user.firstName, session.user.lastName)
+                  }
                 </div>
                 <div className="flex-1">
                   <div className="text-sm text-(--text-primary)">
