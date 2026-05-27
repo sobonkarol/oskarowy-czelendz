@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { PRESET_AVATAR_URLS } from "@/lib/avatars"
+import { PRESET_AVATAR_EMOJIS } from "@/lib/avatars"
 
 export async function PATCH(req: NextRequest) {
   const session = await auth()
@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest) {
 
   const { avatarUrl } = await req.json()
 
-  if (avatarUrl !== null && (typeof avatarUrl !== "string" || !PRESET_AVATAR_URLS.has(avatarUrl))) {
+  if (avatarUrl !== null && (typeof avatarUrl !== "string" || !PRESET_AVATAR_EMOJIS.has(avatarUrl))) {
     return NextResponse.json({ error: "Invalid avatar" }, { status: 400 })
   }
 

@@ -22,8 +22,7 @@ export default function Navbar({ session, avatarUrl }: Props) {
   ]
 
   const avatar = avatarUrl ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
+    <span className="text-base leading-none">{avatarUrl}</span>
   ) : (
     <span className="text-xs font-bold text-black">{initials}</span>
   )
