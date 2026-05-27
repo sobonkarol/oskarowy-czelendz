@@ -10,7 +10,15 @@ export default defineConfig({
   testDir,
   timeout: 30_000,
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? "github" : "list",
+  reporter: process.env.CI
+    ? [
+        ["github"],
+        [
+          "@estruyf/github-actions-reporter",
+          { title: "E2E Test Results", useDetails: true, showError: true },
+        ],
+      ]
+    : "list",
   globalSetup: "./e2e/global.setup.ts",
 
   use: {
