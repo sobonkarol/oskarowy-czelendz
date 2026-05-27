@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { CEREMONY_YEARS, TOTAL_FILMS } from "@/lib/oscar-data"
 import "./globals.css"
 
 export const dynamic = "force-dynamic"
@@ -19,7 +20,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Oskarowy Czelendż",
-  description: "Obejrzyj wszystkie filmy nominowane do Oscara za najlepszy film od 1980 do 2025",
+  description: `Obejrzyj wszystkie filmy nominowane do Oscara za najlepszy film od ${CEREMONY_YEARS[0]} do ${CEREMONY_YEARS[CEREMONY_YEARS.length - 1]}. Ponad ${TOTAL_FILMS} filmów.`,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
