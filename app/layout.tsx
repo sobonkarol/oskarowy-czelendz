@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
 export const dynamic = "force-dynamic"
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pl" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen scrollbar-gold">
         {children}
+        <Analytics />
       </body>
     </html>
   )
