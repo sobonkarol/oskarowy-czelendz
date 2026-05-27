@@ -4,6 +4,7 @@ import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Trophy, Star, Film, Users, ArrowRight, ChevronDown } from "lucide-react"
+import { CEREMONY_YEARS, TOTAL_FILMS } from "@/lib/oscar-data"
 
 export default async function LandingPage() {
   const session = await auth()
@@ -41,7 +42,7 @@ export default async function LandingPage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-8 text-sm text-(--text-secondary)">
             <Trophy className="w-4 h-4 text-(--gold)" />
-            <span>1980 – 2025 · 46 lat Oscarów · ~280 filmów</span>
+            <span>{CEREMONY_YEARS[0]} – {CEREMONY_YEARS[CEREMONY_YEARS.length - 1]} · {CEREMONY_YEARS.length} lat Oscarów · ~{TOTAL_FILMS} filmów</span>
           </div>
 
           <h1 className="font-playfair font-bold text-5xl sm:text-6xl md:text-8xl leading-none mb-6">
@@ -50,7 +51,7 @@ export default async function LandingPage() {
           </h1>
 
           <p className="text-lg md:text-xl text-(--text-secondary) max-w-2xl mx-auto mb-12 leading-relaxed">
-            Obejrzyj wszystkie filmy nominowane do Oscara za najlepszy film od 1980 roku.
+            Obejrzyj wszystkie filmy nominowane do Oscara za najlepszy film od {CEREMONY_YEARS[0]} roku.
             Oceniaj, porównuj i rywalizuj z innymi widzami.
           </p>
 
@@ -87,7 +88,7 @@ export default async function LandingPage() {
               {
                 icon: Film,
                 title: "Oglądaj filmy",
-                desc: "Przeglądaj nominacje do Oscara za najlepszy film rok po roku, od 1980 do 2025. Plakatów, reżyserów i informacje o streamingu.",
+                desc: `Przeglądaj nominacje do Oscara za najlepszy film rok po roku, od ${CEREMONY_YEARS[0]} do ${CEREMONY_YEARS[CEREMONY_YEARS.length - 1]}. Plakaty, reżyserzy i informacje o streamingu.`,
               },
               {
                 icon: Star,
