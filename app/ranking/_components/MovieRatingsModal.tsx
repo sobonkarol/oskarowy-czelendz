@@ -144,7 +144,7 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
                     {i + 1}
                   </span>
                   <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black shrink-0 overflow-hidden">
-                    {r.user.avatarUrl
+                    {r.user.avatarUrl && !r.user.avatarUrl.startsWith("http")
                       ? <span className="text-lg leading-none">{r.user.avatarUrl}</span>
                       : getInitials(r.user.firstName, r.user.lastName)
                     }

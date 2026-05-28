@@ -28,6 +28,7 @@ export default function MovieCard({ movie, index }: Props) {
 
   return (
     <div
+      data-movie-title={movie.title}
       className={cn(
         "group relative glass glass-hover rounded-2xl overflow-hidden",
         movie.isWinner && "ring-1 ring-(--gold) ring-opacity-60"
