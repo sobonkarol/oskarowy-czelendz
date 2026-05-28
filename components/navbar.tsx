@@ -21,14 +21,14 @@ export default function Navbar({ session, avatarUrl }: Props) {
     { href: "/ranking", label: "Ranking", icon: BarChart3 },
   ]
 
-  const avatar = avatarUrl ? (
+  const avatar = avatarUrl && !avatarUrl.startsWith("http") ? (
     <span className="text-base leading-none">{avatarUrl}</span>
   ) : (
     <span className="text-xs font-bold text-black">{initials}</span>
   )
 
   return (
-    <nav className="sticky top-0 z-50 glass border-b border-[var(--border)]">
+    <nav className="sticky top-0 z-50 glass border-b border-(--border)">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 group">
@@ -57,8 +57,8 @@ export default function Navbar({ session, avatarUrl }: Props) {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
                   path === href
-                    ? "bg-[var(--gold-muted)] text-[var(--gold)]"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5"
+                    ? "bg-(--gold-muted) text-(--gold)"
+                    : "text-(--text-secondary) hover:text-(--text-primary) hover:bg-white/5"
                 )}
               >
                 <Icon className="w-4 h-4" />
@@ -79,19 +79,19 @@ export default function Navbar({ session, avatarUrl }: Props) {
               >
                 {avatar}
               </Link>
-              <span className="text-sm text-[var(--text-secondary)]">
+              <span className="text-sm text-(--text-secondary)">
                 {session.user.firstName}
               </span>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="hidden md:flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-red-400 transition-colors px-2 py-1 rounded"
+              className="hidden md:flex items-center gap-1 text-sm text-(--text-muted) hover:text-red-400 transition-colors px-2 py-1 rounded"
             >
               <LogOut className="w-4 h-4" />
             </button>
 
             <button
-              className="md:hidden p-2 text-[var(--text-secondary)]"
+              className="md:hidden p-2 text-(--text-secondary)"
               onClick={() => setOpen(!open)}
             >
               {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -102,7 +102,7 @@ export default function Navbar({ session, avatarUrl }: Props) {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-[var(--border)] p-4 space-y-2">
+        <div className="md:hidden border-t border-(--border) p-4 space-y-2">
           {links.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
@@ -111,15 +111,15 @@ export default function Navbar({ session, avatarUrl }: Props) {
               className={cn(
                 "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all",
                 path === href
-                  ? "bg-[var(--gold-muted)] text-[var(--gold)]"
-                  : "text-[var(--text-secondary)]"
+                  ? "bg-(--gold-muted) text-(--gold)"
+                  : "text-(--text-secondary)"
               )}
             >
               <Icon className="w-4 h-4" />
               {label}
             </Link>
           ))}
-          <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--border)] mt-2">
+          <div className="flex items-center justify-between px-4 py-3 border-t border-(--border) mt-2">
             <Link
               href="/profile"
               onClick={() => setOpen(false)}

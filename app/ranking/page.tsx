@@ -75,7 +75,7 @@ export default async function RankingPage() {
 
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Users ranking */}
-        <div>
+        <div className="min-w-0">
           <h2 className="font-playfair font-semibold text-xl text-(--text-primary) mb-4 flex items-center gap-2">
             <Medal className="w-5 h-5 text-(--gold)" />
             Ranking użytkowników
@@ -105,7 +105,7 @@ export default async function RankingPage() {
                     </span>
 
                     <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black shrink-0 overflow-hidden">
-                      {u.avatarUrl
+                      {u.avatarUrl && !u.avatarUrl.startsWith("http")
                         ? <span className="text-lg leading-none">{u.avatarUrl}</span>
                         : getInitials(u.firstName, u.lastName)
                       }
@@ -134,7 +134,7 @@ export default async function RankingPage() {
               <div className="glass rounded-xl px-4 py-3 flex items-center gap-3 ring-1 ring-(--gold) ring-opacity-30 border-dashed border-(--border)">
                 <span className="w-7 text-center text-sm text-(--text-muted)">–</span>
                 <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black overflow-hidden">
-                  {currentUser?.avatarUrl
+                  {currentUser?.avatarUrl && !currentUser.avatarUrl.startsWith("http")
                     ? <span className="text-lg leading-none">{currentUser.avatarUrl}</span>
                     : getInitials(session.user.firstName, session.user.lastName)
                   }
@@ -152,7 +152,7 @@ export default async function RankingPage() {
         </div>
 
         {/* Films ranking */}
-        <div>
+        <div className="min-w-0">
           <h2 className="font-playfair font-semibold text-xl text-(--text-primary) mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 text-(--gold)" />
             Top filmy
