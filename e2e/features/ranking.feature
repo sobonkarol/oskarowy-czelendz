@@ -30,7 +30,7 @@ Feature: Ranking page
     Given I am logged in and on "/movies/2025"
     When I rate the first unrated film with score 9
     And I navigate to "/ranking"
-    And I click the first film in the ranking
+    And I click the film I just rated in the ranking
     Then I can see the ratings popup
     And I can see the score "9" in the popup
 
