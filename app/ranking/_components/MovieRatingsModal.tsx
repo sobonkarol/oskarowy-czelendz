@@ -60,9 +60,9 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
       style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
       onClick={e => { if (e.target === overlayRef.current) onClose() }}
     >
-      <div className="glass rounded-2xl w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl border border-[var(--border)]">
+      <div data-testid="ratings-modal" className="glass rounded-2xl w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl border border-(--border)">
         {/* Header */}
-        <div className="flex items-start gap-4 p-5 border-b border-[var(--border)]">
+        <div className="flex items-start gap-4 p-5 border-b border-(--border)">
           {data?.movie.posterPath && (
             <div className="relative w-14 h-20 rounded-lg overflow-hidden shrink-0 shadow-lg">
               <Image
@@ -83,11 +83,11 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
                   {data?.movie.isWinner && (
                     <Trophy className="w-4 h-4 text-(--gold) shrink-0" />
                   )}
-                  <h2 className="font-playfair font-bold text-lg text-[var(--text-primary)] leading-tight">
+                  <h2 className="font-playfair font-bold text-lg text-(--text-primary) leading-tight">
                     {data?.movie.title}
                   </h2>
                 </div>
-                <p className="text-sm text-[var(--text-muted)] mt-0.5">
+                <p className="text-sm text-(--text-muted) mt-0.5">
                   {data?.movie.ceremonyYear} · {data?.movie.director}
                 </p>
                 {avg !== null && data && data.ratings.length > 0 && (
@@ -96,7 +96,7 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
                     <span className={cn("font-bold text-sm", getScoreColor(avg))}>
                       {formatScore(avg)}
                     </span>
-                    <span className="text-xs text-[var(--text-muted)]">
+                    <span className="text-xs text-(--text-muted)">
                       śr. · {data.ratings.length} {data.ratings.length === 1 ? "ocena" : "ocen"}
                     </span>
                   </div>
@@ -105,8 +105,9 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
             )}
           </div>
           <button
+            aria-label="Zamknij popup"
             onClick={onClose}
-            className="shrink-0 p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/10 transition-colors"
+            className="shrink-0 p-1.5 rounded-lg text-(--text-muted) hover:text-(--text-primary) hover:bg-white/10 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -128,7 +129,7 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
               ))}
             </div>
           ) : data?.ratings.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-[var(--text-muted)]">
+            <div className="flex flex-col items-center justify-center py-10 text-(--text-muted)">
               <Users className="w-10 h-10 mb-3 opacity-30" />
               <p className="text-sm">Nikt jeszcze nie ocenił tego filmu</p>
             </div>
@@ -139,7 +140,7 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
                   key={r.user.id}
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors"
                 >
-                  <span className="w-5 text-center text-xs text-[var(--text-muted)] shrink-0">
+                  <span className="w-5 text-center text-xs text-(--text-muted) shrink-0">
                     {i + 1}
                   </span>
                   <div className="w-9 h-9 rounded-full winner-badge flex items-center justify-center text-xs font-bold text-black shrink-0 overflow-hidden">
@@ -149,13 +150,13 @@ export default function MovieRatingsModal({ movieId, onClose }: Props) {
                     }
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-[var(--text-primary)] truncate">
+                    <div className="text-sm font-medium text-(--text-primary) truncate">
                       {r.user.firstName} {r.user.lastName}
                     </div>
                   </div>
                   <div className={cn("font-bold text-sm shrink-0", getScoreColor(r.score))}>
                     {r.score}
-                    <span className="text-xs font-normal text-[var(--text-muted)]">/10</span>
+                    <span className="text-xs font-normal text-(--text-muted)">/10</span>
                   </div>
                 </div>
               ))}
